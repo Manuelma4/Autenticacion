@@ -1,21 +1,20 @@
-// En el archivo app.ts
 import express from 'express';
-import mongoose from 'mongoose';
-import userRouter from './routes/user';
-import errorMiddleware from './middleware/error';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+import authRoutes from './routes/auth.routes';
+import roleRoutes from './routes/role.routes';
+import userRoutes from './routes/user.routes';
+
+dotenv.config();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
-app.use(userRouter);
-app.use(errorMiddleware);
 
-mongoose.connect('mongodb://localhost:27017/myapp', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-});
+app.use('/auth', authRoutes);
+app.use('/roles', roleRoutes);
+app.use('/users', userRoutes);
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
+export default app;
